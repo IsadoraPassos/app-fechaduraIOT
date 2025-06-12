@@ -44,3 +44,9 @@ export async function getSenhas(): Promise<
   const result = await db.getAllAsync("SELECT * FROM senhas;", []);
   return result as any;
 }
+
+export async function deleteSenha(id: number) {
+  const db = await openDB();
+  await db.runAsync("DELETE FROM senhas WHERE id = ?;", [id]);
+  console.log(`Senha com id ${id} excluída`);
+}

@@ -26,7 +26,7 @@ export default function CreatePasswordScreen({ navigation }: any) {
       return;
     }
   try {
-    console.log("Valores para inserir:", nome, senha, horaInicio, horaFim);
+    //console.log("Valores para inserir:", nome, senha, horaInicio, horaFim);
     await insertSenha(nome, senha, horaInicio, horaFim);
     Alert.alert("Sucesso", "Senha cadastrada!");
     navigation.goBack();
