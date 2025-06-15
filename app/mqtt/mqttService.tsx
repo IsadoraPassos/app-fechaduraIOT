@@ -1,5 +1,6 @@
-import mqtt from "mqtt";
 import type { MqttClient } from "mqtt";
+import mqtt from "mqtt";
+import { validarSenhaDigitada } from "../db/validacao";
 
 let client: MqttClient;
 
@@ -13,11 +14,20 @@ export const connectMQTT = () => {
 
   client.on("connect", () => {
     console.log("📡 Conectado ao broker MQTT");
-    client.subscribe("fechadura/log");
+    client.subscribe("fechadura/senha");
   });
 
-  client.on("message", (topic: string, message: Buffer) => {
-    console.log(`📩 ${topic}: ${message.toString()}`);
+  client.on("message", async (topic: string, message: Buffer) => {
+    const senhaRecebida = message.toString();
+    console.log(`📩 Senha recebida: ${senhaRecebida}`);
+
+    const resultado = await validarSenhaDigitada(senhaRecebida);
+    if (resultado.valida) {
+      client.publish("fechadura/comando", "ABRIR");
+      console.log("🔓 Senha válida. Fechadura será aberta.");
+    } else {
+      console.log("❌ Senha inválida ou fora do horário.");
+    }
   });
 
   client.on("error", (err: Error) => {
