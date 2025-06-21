@@ -1,44 +1,41 @@
-import type { MqttClient } from "mqtt";
-import mqtt from "mqtt";
 import { validarSenhaDigitada } from "../db/validacao";
 
-let client: MqttClient;
+const GATEWAY_URL = "http://localhost:3000";  // IP correto do gateway
 
-export const connectMQTT = () => {
-  client = mqtt.connect("mqtt://200.143.224.99:1183", {
-    username: "passos",
-    password: "passos123",
-    connectTimeout: 4000,
-    reconnectPeriod: 1000,
-  });
-
-  client.on("connect", () => {
-    console.log("📡 Conectado ao broker MQTT");
-    client.subscribe("fechadura/senha");
-  });
-
-  client.on("message", async (topic: string, message: Buffer) => {
-    const senhaRecebida = message.toString();
-    console.log(`📩 Senha recebida: ${senhaRecebida}`);
-
-    const resultado = await validarSenhaDigitada(senhaRecebida);
-    if (resultado.valida) {
-      client.publish("fechadura/comando", "ABRIR");
-      console.log("🔓 Senha válida. Fechadura será aberta.");
-    } else {
-      console.log("❌ Senha inválida ou fora do horário.");
-    }
-  });
-
-  client.on("error", (err: Error) => {
-    console.log("❌ Erro MQTT:", err);
-  });
-};
-
-export const abrirFechadura = () => {
-  if (client && client.connected) {
-    client.publish("fechadura/comando", "ABRIR");
-  } else {
-    console.log("⚠️ MQTT não conectado");
+// Envia a senha pro gateway (MQTT) para que o app que roda no backend a processe
+export async function enviarSenha(senha: string): Promise<{ valida: boolean; mensagem: string }> {
+  try {
+    console.log("📩 Enviando senha:", senha);
+    const res = await fetch(`${GATEWAY_URL}/enviar-senha`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ senha }),
+    });
+    const body = await res.json();
+    console.log("🔁 Resposta gateway:", body);
+    return body;
+  } catch (err) {
+    console.error("❌ Erro ao enviar senha", err);
+    return { valida: false, mensagem: "Erro de conexão" };
   }
-};
+}
+
+// Valida a senha localmente antes de enviar o comando para abrir
+export async function abrirFechadura(senhaDigitada: string): Promise<{ status: boolean; mensagem: string }> {
+  try {
+    // Valida localmente com o banco
+    const resultado = await validarSenhaDigitada(senhaDigitada);
+    if (!resultado.valida) {
+      return { status: false, mensagem: "Senha inválida ou fora do horário" };
+    }
+
+    // Chama o gateway para abrir
+    const res = await fetch(`${GATEWAY_URL}/abrir`, { method: "POST" });
+    const body = await res.json();
+    console.log("🔁 Resposta abrir:", body);
+    return body;
+  } catch (err) {
+    console.error("❌ Erro HTTP abrir", err);
+    return { status: false, mensagem: "Erro de conexão" };
+  }
+}
