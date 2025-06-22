@@ -19,7 +19,14 @@ export async function initDatabase() {
         senha TEXT NOT NULL,
         hora_inicio TEXT NOT NULL,
         hora_fim TEXT NOT NULL
-      );`
+      );
+      CREATE TABLE IF NOT EXISTS logs (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      nome TEXT,
+      timestamp TEXT NOT NULL,
+      status TEXT NOT NULL
+      );
+      `
   );
 }
 
@@ -49,4 +56,15 @@ export async function deleteSenha(id: number) {
   const db = await openDB();
   await db.runAsync("DELETE FROM senhas WHERE id = ?;", [id]);
   console.log(`Senha com id ${id} excluída`);
+}
+
+export async function getLogs(): Promise<
+  { id: number; nome: string | null; timestamp: string; status: string }[]
+> {
+  const db = await openDB();
+  const rows = await db.getAllAsync(
+    "SELECT * FROM logs ORDER BY id DESC;",
+    []
+  );
+  return rows as any;
 }

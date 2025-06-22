@@ -5,7 +5,6 @@ const GATEWAY_URL = "http://192.168.3.39:3000";  // IP correto do gateway
 // Envia a senha pro gateway (MQTT) para que o app que roda no backend a processe
 export async function enviarSenha(senha: string): Promise<{ valida: boolean; mensagem: string }> {
   try {
-    console.log("📩 Enviando senha:", senha);
     const res = await fetch(`${GATEWAY_URL}/enviar-senha`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

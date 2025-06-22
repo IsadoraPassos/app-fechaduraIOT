@@ -18,6 +18,21 @@ interface ValidacaoResult {
   nome?: string;
 }
 
+// função para gravação de logs
+export async function logAcesso(
+  nome: string | null,
+  status: "ACESSO" | "FORA_HORARIO" | "INVALIDO"
+) {
+  const db = await openDB();
+  const now = new Date();
+  const ts = now.toISOString(); // ex: 2025-06-22T14:35:00Z
+
+  await db.runAsync(
+    "INSERT INTO logs (nome, timestamp, status) VALUES (?, ?, ?);",
+    [nome, ts, status]
+  );
+}
+
 export async function validarSenhaDigitada(
   senhaRecebida: string
 ): Promise<ValidacaoResult> {
@@ -33,6 +48,7 @@ export async function validarSenhaDigitada(
   );
 
   if (rows.length === 0) {
+    await logAcesso(null, "INVALIDO");
     return { valida: false };
   }
 
@@ -45,8 +61,10 @@ export async function validarSenhaDigitada(
 
   // Verifica se está dentro do horário
   if (hora_inicio <= horaAtual && horaAtual <= hora_fim) {
+    await logAcesso(nome, "ACESSO");
     return { valida: true, nome };
   }
 
+  await logAcesso(nome, "FORA_HORARIO");
   return { valida: false };
 }

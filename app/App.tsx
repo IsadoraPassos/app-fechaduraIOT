@@ -8,6 +8,7 @@ import PasswordListScreen from "./components/PasswordListScreen";
 import { Provider as PaperProvider } from "react-native-paper";
 import { useEffect } from "react";
 import { initDatabase } from "./db/database";
+import LogScreen from "./components/LogScreen";
 
 
 const Stack = createNativeStackNavigator();
@@ -25,6 +26,7 @@ export default function App() {
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Nova Senha" component={CreatePasswordScreen} />
           <Stack.Screen name="Lista de Senhas" component={PasswordListScreen} />
+          <Stack.Screen name="Logs" component={LogScreen} />
         </Stack.Navigator>
       
     </PaperProvider>

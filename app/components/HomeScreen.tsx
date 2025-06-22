@@ -63,6 +63,14 @@ export default function HomeScreen({ navigation }: Props) {
       >
         Ver Senhas Cadastradas
       </Button>
+
+      <Button
+        mode="outlined"
+        onPress={() => navigation.navigate("Logs")}
+        style={{ marginTop: 16 }}
+      >
+        Histórico de Acessos
+      </Button>
     </View>
   );
 }
