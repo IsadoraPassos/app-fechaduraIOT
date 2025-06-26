@@ -1,13 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Alert } from "react-native";
 import { Button, Text, TextInput } from "react-native-paper";
-import { enviarSenha, abrirFechadura } from "../mqtt/mqttService";
+import { initMQTT, abrirFechadura } from "../mqtt/mqttService";
 
 type Props = {
   navigation: any;
 };
 
 export default function HomeScreen({ navigation }: Props) {
+  useEffect(() => {
+    initMQTT();
+  }, []);
+
   const [senha, setSenha] = useState("");
 
   const handleAbrir = async () => {
@@ -15,14 +19,8 @@ export default function HomeScreen({ navigation }: Props) {
       Alert.alert("Aviso", "Digite a senha antes de abrir a fechadura");
       return;
     }
-    const res = await enviarSenha(senha);
-    if (res.valida) {
-      const resAbrir = await abrirFechadura(senha);
-      if (resAbrir.status) Alert.alert("✔️ Sucesso", "Fechadura aberta");
-      else Alert.alert("❌ Erro", resAbrir.mensagem);
-    } else {
-      Alert.alert("❌ Acesso negado", res.mensagem);
-    }
+    const resposta = await abrirFechadura(senha); // senha vinda do usuário
+    alert(resposta.mensagem);
   };
 
   return (
