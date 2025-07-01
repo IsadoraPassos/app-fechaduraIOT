@@ -18,7 +18,7 @@ export default function LoginScreen({ navigation }: Props) {
   };
 
   return (
-    <View style={{ padding: 20 }}>
+    <View style={{ padding: 10 }}>
       <Text variant="titleLarge" style={{ padding: 5, color: "#111" }}>Login da Fechadura</Text>
       <TextInput
         label="Senha"

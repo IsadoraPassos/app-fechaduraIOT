@@ -1,50 +1,95 @@
-# Welcome to your Expo app 👋
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+# Fechadura Eletrônica IoT 🔒📱
 
-## Get started
+Este projeto apresenta um protótipo funcional de uma fechadura eletrônica com controle de acesso via teclado físico e aplicativo móvel, utilizando Arduino, ESP8266 com Tasmota e comunicação MQTT.
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## 📦 Estrutura do Projeto
 
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+.
+├── arduino/
+│   └── tranca-wifi.ino
+├── app/
+│   └── (código do aplicativo desenvolvido com React Native + Expo)
+├── artigo/
+│   └── Trabalho_IOT.pdf
+└── README.md
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-## Learn more
+## 🚀 Como Executar o Projeto
 
-To learn more about developing your project with Expo, look at the following resources:
+### 1. ⚙️ Upload do código para o Arduino
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+1. Abra a IDE do Arduino.
+2. Vá em **Arquivo > Abrir** e selecione o arquivo `arduino/tranca-wifi.ino`.
+3. Conecte seu Arduino Uno via cabo USB.
+4. Certifique-se de ter a biblioteca **Keypad** instalada ([link](https://github.com/fbryan/Keypad)).
+5. Selecione a porta correta (menu **Ferramentas > Porta**) e clique em **Upload**.
 
-## Join the community
+> Obs: durante o upload, desconecte o RX/TX do Arduino se o ESP estiver conectado.
 
-Join our community of developers creating universal apps.
+---
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### 2. 🌐 Configuração do módulo ESP8266 com Tasmota
+
+1. Siga as instruções deste tutorial para instalar o firmware Tasmota no seu ESP-01:  
+   👉 https://www.instructables.com/Easy-ESP-01-Tasmota-Programming
+2. Após instalar, configure a rede Wi-Fi no Tasmota.
+3. Acesse a interface web do Tasmota pelo IP do ESP na rede.
+4. Vá em **Configuration > Configure MQTT** e adicione:
+   - **Host:** IP do broker MQTT
+   - **Port:** `1883` ou `9001` (WebSocket)
+   - **User/Password:** `user / password`
+   - **Topic:** `4497700` (ou personalizado)
+
+---
+
+### 3. 📱 Executando o aplicativo mobile
+
+#### Pré-requisitos:
+- Node.js e npm instalados
+- Expo CLI (`npm install -g expo-cli`)
+- Aplicativo **Expo Go** instalado no seu celular (Android/iOS)
+
+#### Passos:
+
+```bash
+# Clone o repositório
+git clone https://github.com/IsadoraPassos/app-fechaduraIOT.git
+cd app-fechaduraIOT
+
+# Instale as dependências
+npm install
+
+# Inicie o projeto
+npx expo start
+```
+
+1. Com o terminal aberto, escaneie o QR Code com o aplicativo Expo Go.
+2. O app será aberto no celular.
+3. Faça login e comece a cadastrar senhas.
+
+---
+
+## 🔧 Montagem da Parte Física
+
+A descrição completa da montagem física da fechadura (componentes, conexões e esquema) está detalhada no artigo do projeto, disponível em:
+
+📄 `artigo/Trabalho_IOT.pdf`
+
+---
+
+## ✅ Pronto!
+
+Agora você pode utilizar o teclado físico ou o aplicativo para abrir a fechadura.  
+Acompanhe os acessos na tela de **Histórico** do app!
+
+---
+
+## 📄 Licença
+
+Este projeto foi desenvolvido como protótipo acadêmico e pode ser adaptado livremente com os devidos créditos.

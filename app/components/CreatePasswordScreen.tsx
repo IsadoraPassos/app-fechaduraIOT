@@ -39,7 +39,7 @@ export default function CreatePasswordScreen({ navigation }: any) {
 
   return (
     <View style={{ padding: 20 }}>
-      <Text variant="titleMedium">Nova Senha</Text>
+      <Text variant="titleMedium" style={{color: '#111'}}>Criar Senha</Text>
       <TextInput label="Nome" value={nome} onChangeText={setNome} />
       <TextInput
         label="Senha"

@@ -3,10 +3,10 @@ import mqtt, { MqttClient } from "mqtt";
 import { logAcesso, validarSenhaDigitada } from "../db/validacao";
 import { getSenhaEmergencia } from "../db/database";
 
-const WS_URL = "ws://SEU_URL";
+const WS_URL = "SEU_URL";
 const MQTT_OPTIONS = {
-  username: "SEU_LOGIN",
-  password: "SUA_SENHA",
+  username: "USER",
+  password: "PASSWORD",
   reconnectPeriod: 2000,
   connectTimeout: 4000,
 };
