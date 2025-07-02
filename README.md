@@ -45,7 +45,14 @@ Este projeto apresenta um protótipo funcional de uma fechadura eletrônica com 
    - **Port:** `1883` ou `9001` (WebSocket)
    - **User/Password:** `user / password`
    - **Topic:** `4497700` (ou personalizado)
-
+5. No console do Tasmota execute os seguintes comandos:
+   ```BaudRate 9600
+      SerialBuffer 520
+      SerialDelimiter 10
+      Rule1 on System#Boot do SerialSend 1 endon
+      Rule1 1
+      Restart 1
+```
 ---
 
 ### 3. 📱 Executando o aplicativo mobile
