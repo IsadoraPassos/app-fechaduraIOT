@@ -25,7 +25,7 @@ export function initMQTT() {
     // publicar senha de emergência ao conectar
     const emerg = await getSenhaEmergencia();
     if (emerg) {
-      client.publish("cmnd/4497754/SerialSend1", `senha:${emerg}`);
+      client.publish("cmnd/tasmota_44A15A/SerialSend1", `senha:${emerg}`);
       console.log("🚨 Senha de emergência enviada:");
     }
 
@@ -67,7 +67,7 @@ export function initMQTT() {
 
     // Detecta comando de abrir vindo do app ou backend
     if (topic === "fechadura/comando" && msg === "ABRIR") {
-      client.publish("cmnd/4497754/SerialSend1", "ABRIR");
+      client.publish("cmnd/tasmota_44A15A/SerialSend1", "ABRIR");
       console.log("🔓 Comando ABRIR enviado ao dispositivo Tasmota");
     }
   });
@@ -85,7 +85,7 @@ async function processarSenhaRecebida(senha: string) {
   try {
     const resultado = await validarSenhaDigitada(senha);
     if (resultado.valida) {
-      client.publish("cmnd/4497754/SerialSend1", "ABRIR");
+      client.publish("cmnd/tasmota_44A15A/SerialSend1", "ABRIR");
       console.log("✅ Tecla válida — enviada 'ABRIR'");
       client.publish("fechadura/log", `Acesso: ${resultado.nome}`);
     } else {
@@ -113,7 +113,7 @@ export async function abrirFechadura(
     if (!resultado.valida) {
       return { status: false, mensagem: "Senha inválida ou fora do horário" };
     }
-    client.publish("cmnd/4497754/SerialSend1", "ABRIR");
+    client.publish("cmnd/tasmota_44A15A/SerialSend1", "ABRIR");
     console.log("🔓 Comando ABRIR publicado manualmente");
     return { status: true, mensagem: `Acesso autorizado: ${resultado.nome}` };
   } catch (err) {
