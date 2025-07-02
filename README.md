@@ -90,6 +90,12 @@ Acompanhe os acessos na tela de **Histórico** do app!
 
 ---
 
+## Vídeo de Exemplo
+
+Link para o vídeo de demonstração do projeto: ([video](https://www.youtube.com/watch?v=OumpysL4wyI)) 
+
+---
+
 ## 📄 Licença
 
 Este projeto foi desenvolvido como protótipo acadêmico e pode ser adaptado livremente com os devidos créditos.
